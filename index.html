@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <title>進階課程｜輪胎・傳動・煞車・避震</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <style>
+      :root {
+        --accent: #bef74e;
+        --bg: #f5f6fb;
+        --text-main: #17171c;
+        --text-muted: #666a73;
+        --card-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+        --line-soft: #e2e5f0;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+          "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+        background-color: #ffffff;
+        color: var(--text-main);
+        line-height: 1.6;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      header {
+        border-bottom: 1px solid var(--line-soft);
+        padding: 16px 0;
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .logo {
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+      }
+
+      /* Hero */
+      .hero {
+        padding: 48px 0 40px;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+        gap: 40px;
+        align-items: center;
+      }
+
+      .hero-eyebrow {
+        font-size: 0.8rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 10px;
+      }
+
+      .hero-title {
+        font-size: clamp(2rem, 3vw, 2.6rem);
+        line-height: 1.15;
+        font-weight: 700;
+        margin: 0 0 14px;
+      }
+
+      .hero-title span {
+        background: linear-gradient(135deg, var(--accent), #e8ff9f);
+        padding: 0 6px;
+        border-radius: 6px;
+      }
+
+      .hero-text {
+        font-size: 0.98rem;
+        color: var(--text-muted);
+        margin: 0 0 20px;
+        max-width: 420px;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+
+      .btn-main {
+        padding: 9px 20px;
+        border-radius: 999px;
+        border: none;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 600;
+        background-color: var(--accent);
+        color: #111;
+      }
+
+      .btn-outline {
+        padding: 9px 18px;
+        border-radius: 999px;
+        border: 1px solid #111;
+        font-size: 0.9rem;
+        background: transparent;
+        cursor: pointer;
+      }
+
+      .hero-meta {
+        font-size: 0.84rem;
+        color: var(--text-muted);
+      }
+
+      /* 1. 輪播：保留空框供你填內容 */
+      .hero-right {
+        border-radius: 24px;
+        border: 1px dashed var(--line-soft);
+        background-color: var(--bg);
+        padding: 16px;
+        min-height: 220px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+      }
+
+      .hero-right span {
+        display: block;
+        margin-top: 6px;
+        font-size: 0.82rem;
+      }
+
+      .hero-carousel {
+        width: 100%;
+        max-width: 420px;
+        min-height: 190px;
+        position: relative;
+      }
+
+      .hero-slide {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        transform: translateY(6px);
+        transition: opacity 0.35s ease, transform 0.35s ease;
+        padding: 8px 6px 28px;
+      }
+
+      .hero-slide img {
+        width: 100%;
+        height: 180px;
+        display: block;
+        border-radius: 16px;
+        object-fit: cover;
+      }
+
+      .hero-slide.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .hero-slide h3 {
+        margin: 0 0 8px;
+        font-size: 1.05rem;
+        font-weight: 600;
+      }
+
+      .hero-slide p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+      }
+
+      /* 底下圓點 */
+      .hero-dots {
+        position: absolute;
+        bottom: 4px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 6px;
+      }
+
+      .hero-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+        background-color: #c4c7d5;
+      }
+
+      .hero-dot.active {
+        background-color: #17171c;
+      }
+
+      /* Section title */
+      .section-header {
+        padding: 32px 0 12px;
+        border-top: 1px solid var(--line-soft);
+        margin-top: 8px;
+      }
+
+      .section-kicker {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--text-muted);
+        margin-bottom: 6px;
+      }
+
+      .section-title {
+        font-size: 1.6rem;
+        margin: 0 0 4px;
+      }
+
+      .section-text {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        margin: 0;
+        max-width: 520px;
+      }
+
+      /* 3. 卡牌 – 參考附圖 testimonial 樣式 */
+      .topics-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+        padding-bottom: 36px;
+      }
+
+      .topic-card {
+        background-color: #ffffff;
+        border-radius: 24px;
+        box-shadow: var(--card-shadow);
+        padding: 22px 20px 20px;
+        text-align: center;
+        font-size: 0.9rem;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .topic-card-inner {
+        display: flex;
+        flex-direction: column;
+        height: 100%; /* 讓內容撐滿整張卡 */
+      }
+
+      .topic-upper {
+        /* 上半段：頭像＋說明＋重點條列 */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .topic-avatar {
+        width: 72px;
+        height: 72px;
+        border-radius: 18px;
+        background-color: #d9dde8;
+        overflow: hidden;
+        margin-bottom: 4px;
+      }
+
+      .topic-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .topic-name {
+        font-weight: 600;
+        margin: 0;
+        font-size: 1.02rem;
+      }
+
+      .topic-role {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin: 0 0 4px;
+      }
+
+      .topic-code {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--text-muted);
+        margin-bottom: 6px;
+      }
+
+      .topic-summary {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        margin: 0;
+        text-align: left;
+      }
+
+      .topic-summary,
+      .topic-list {
+        text-align: left;
+        width: 100%;
+      }
+
+      .topic-list {
+        margin: 8px 0 0 18px;
+        padding: 0;
+        text-align: left;
+        font-size: 0.88rem;
+      }
+
+      .topic-list li {
+        margin-bottom: 3px;
+      }
+
+      .topic-stronger {
+        margin-top: auto;
+        padding-top: 8px;
+        border-top: 1px solid #eef0f7;
+        font-size: 0.86rem;
+        text-align: left;
+        color: #404557;
+      }
+
+      .topic-stronger b {
+        display: block;
+        margin-bottom: 3px;
+        font-weight: 600;
+      }
+
+      /* 卡牌內的主按鈕 */
+      .topic-btn {
+        margin-top: 10px;
+        align-self: stretch; /* 讓按鈕寬度跟卡片一樣 */
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        padding: 8px 14px;
+        border-radius: 999px;
+        border: 1px solid #17171c;
+        background-color: #17171c;
+        color: #ffffff;
+        font-size: 0.86rem;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 0.18s ease, color 0.18s ease,
+          transform 0.12s ease, box-shadow 0.12s ease;
+      }
+
+      .topic-btn:hover {
+        background-color: #ffffff;
+        color: #17171c;
+        box-shadow: 0 8px 18px rgba(15, 23, 42, 0.18);
+        transform: translateY(-1px);
+      }
+
+      .topic-btn:active {
+        transform: translateY(0);
+        box-shadow: none;
+      }
+
+      /* RWD */
+      @media (max-width: 900px) {
+        .hero-grid {
+          grid-template-columns: minmax(0, 1fr);
+          gap: 28px;
+        }
+
+        .topics-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 600px) {
+        .topics-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <nav class="nav">
+          <div class="logo">ADVANCED TRAINING</div>
+        </nav>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="container">
+        <div class="hero-grid">
+          <div>
+            <div class="hero-eyebrow">進階專區 · 車輛動力與操控</div>
+            <h1 class="hero-title">
+              讓你的實務經驗<br />
+              進階成<span>整車診斷</span>與調校能力
+            </h1>
+            <p class="hero-text">
+              透過四門進階課程：輪胎、傳動、煞車與避震，
+              建立你對車輛動態的完整理解。從「覺得怪」到「說得清楚、解得出來」。
+            </p>
+            <div class="hero-actions">
+              <a href="#topics" class="btn-main">瀏覽進階課程</a>
+              <!-- <a href="#topics" class="btn-outline">選一門先開始</a> -->
+            </div>
+            <p class="hero-meta">
+              適合已有維修實務的技師與工程師 · 建議可分階段完成，不需一次修完。
+            </p>
+          </div>
+
+          <!-- 1. 輪播 -->
+          <div class="hero-right">
+            <div class="hero-carousel" id="heroCarousel">
+              <div class="hero-slide active">
+                <img src="img/tire-hero.jpg" alt="輪胎知識課程" />
+                <h3>輪胎 · Tire</h3>
+                <!-- <p>
+                  從磨耗花紋、胎壓與胎溫，看懂抓地力與安全風險，是整車診斷的第一站。
+                </p> -->
+              </div>
+              <div class="hero-slide">
+                <img src="img/transmission-hero.jpg" alt="傳動系統課程" />
+                <h3>傳動 · Transmission</h3>
+                <!-- <p>
+                  透過普利珠、皮帶與齒比調整，讓加速反應與油耗表現更貼近車主需求。
+                </p> -->
+              </div>
+              <div class="hero-slide">
+                <img src="img/brake-hero.png" alt="煞車系統課程" />
+                <h3>煞車 · Brake</h3>
+                <!-- <p>
+                  把「煞得住」拆成制動距離、手感與熱衰退，建立標準化檢查流程。
+                </p> -->
+              </div>
+              <div class="hero-slide">
+                <img src="img/suspension-hero.jpg" alt="避震系統課程" />
+                <h3>避震 · Suspension</h3>
+                <!-- <p>
+                  將「硬、軟、晃」轉成可調整的避震參數，平衡操控穩定與騎乘舒適。
+                </p> -->
+              </div>
+
+              <div class="hero-dots">
+                <button class="hero-dot active" data-index="0"></button>
+                <button class="hero-dot" data-index="1"></button>
+                <button class="hero-dot" data-index="2"></button>
+                <button class="hero-dot" data-index="3"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="topics">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-kicker">Advanced Courses</div>
+          <h2 class="section-title">四大進階課程 · 一張卡看懂重點與收穫</h2>
+          <p class="section-text">
+            卡牌結構參考學員見證呈現方式：上方是主題與角色，下方用段落描述，
+            讓學員一眼看到「這門課在說什麼」以及「修完會變得更擅長什麼」。
+          </p>
+        </div>
+
+        <div class="topics-grid">
+          <!-- 輪胎卡牌 -->
+          <article class="topic-card">
+            <div class="topic-card-inner">
+              <div class="topic-upper">
+                <div class="topic-avatar">
+                  <!-- 你可以放主視覺或示意圖 -->
+                  <img src="img/tire.png" alt="輪胎課程" />
+                </div>
+                <p class="topic-name">輪胎知識與安全診斷</p>
+                <p class="topic-role">抓地力判讀 · 風險預測</p>
+                <p class="topic-code">Course 01 · Tire</p>
+
+                <p class="topic-summary">
+                  從輪胎花紋、胎壓到磨耗型態，建立你對「抓得住 /
+                  抓不住」的判斷標準，
+                  讓輪胎不只是消耗品，而是最重要的安全訊號來源。
+                </p>
+                <ul class="topic-list">
+                  <li>
+                    辨識不同胎型（通勤 / 雨胎 / 運動胎）的特性與適用情境。
+                  </li>
+                  <li>理解胎壓、胎溫與抓地力、油耗、壽命之間的實際關係。</li>
+                  <li>快速判讀偏磨、鋸齒、局部禿點等異常磨耗背後的原因。</li>
+                  <li>建立輪胎老化、硬化與更換時機的判斷基準。</li>
+                </ul>
+              </div>
+              <!-- 2. 各自課程後附上「會更擅長」 -->
+              <p class="topic-stronger">
+                <b>完成這門課，你會更擅長：</b>
+                用輪胎狀態快速掃描整車健康度，清楚向車主解釋「為什麼這條胎需要換」，
+                並給出兼顧安全與使用情境的胎款建議。
+              </p>
+              <a href="Tire-knowledge" class="topic-btn"> 查看輪胎課程 </a>
+            </div>
+          </article>
+
+          <!-- 傳動卡牌 -->
+          <article class="topic-card">
+            <div class="topic-card-inner">
+              <div class="topic-upper">
+                <div class="topic-avatar">
+                  <img src="img/transmission.png" alt="傳動課程" />
+                </div>
+                <p class="topic-name">傳動系統原理與調校實務</p>
+                <p class="topic-role">加速反應 · 油耗平衡</p>
+                <p class="topic-code">Course 02 · Transmission</p>
+
+                <p class="topic-summary">
+                  拆解動力從引擎到後輪的每一個環節，讓你調整普利珠、皮帶與離合器時，
+                  腦中有清楚的「前因後果」而不是只靠經驗試。
+                </p>
+                <ul class="topic-list">
+                  <li>理解普利珠重量與變速盤角度對起步與中後段加速的影響。</li>
+                  <li>掌握齒比、皮帶與離合器設定對油耗與轉速區間的關係。</li>
+                  <li>
+                    釐清常見傳動異音與震動（滑鍵、軸承、齒輪間隙等）來源。
+                  </li>
+                  <li>依通勤、雙載、山路等不同情境設計具體的傳動設定方案。</li>
+                </ul>
+              </div>
+              <p class="topic-stronger">
+                <b>完成這門課，你會更擅長：</b>
+                依照騎乘需求開出有邏輯的傳動設定，試車時能精準描述「差在哪裡」，
+                並向車主說明調整後對加速與油耗的實際影響。
+              </p>
+              <a href="Transmission-system" class="topic-btn"> 查看傳動課程 </a>
+            </div>
+          </article>
+
+          <!-- 煞車卡牌 -->
+          <article class="topic-card">
+            <div class="topic-card-inner">
+              <div class="topic-upper">
+                <div class="topic-avatar">
+                  <img src="img/brake.png" alt="煞車課程" />
+                </div>
+                <p class="topic-name">煞車系統診斷與升級評估</p>
+                <p class="topic-role">制動效能 · 風險控管</p>
+                <p class="topic-code">Course 03 · Brake</p>
+
+                <p class="topic-summary">
+                  把「煞得住」這件事拆成制動距離、手感與熱衰退三個面向，
+                  建立一套可被複製的煞車檢查與試車流程。
+                </p>
+                <ul class="topic-list">
+                  <li>理解來令片材質、盤徑與油壓比對制動距離的影響概念。</li>
+                  <li>掌握煞車油老化、含水與管路進氣的判讀與排氣順序。</li>
+                  <li>診斷盤面變形、卡鉗咬合不均與異音產生的原因。</li>
+                  <li>評估改裝卡鉗、碟盤與鋼喉時的安全與法規風險。</li>
+                </ul>
+              </div>
+              <p class="topic-stronger">
+                <b>完成這門課，你會更擅長：</b>
+                以「數字＋感受」雙重角度評估煞車表現，
+                清楚向車主說明目前風險與可行的升級或保養選項。
+              </p>
+              <a href="/course/brake" class="topic-btn"> 查看煞車課程 </a>
+            </div>
+          </article>
+
+          <!-- 避震卡牌 -->
+          <article class="topic-card">
+            <div class="topic-card-inner">
+              <div class="topic-upper">
+                <div class="topic-avatar">
+                  <img src="img/suspension.png" alt="避震課程" />
+                </div>
+                <p class="topic-name">避震器原理與騎乘體感調整</p>
+                <p class="topic-role">操控穩定 · 舒適平衡</p>
+                <p class="topic-code">Course 04 · Suspension</p>
+
+                <p class="topic-summary">
+                  把騎乘時感覺到的「硬、軟、浮、晃」轉換成可調整的參數，
+                  讓你在設定避震時有明確判準，而不是一直試到「剛好」。
+                </p>
+                <ul class="topic-list">
+                  <li>理解彈簧常數、預載與行程對車身姿態與回饋的影響。</li>
+                  <li>辨認壓縮 / 回彈阻尼設定錯誤時的典型騎乘症狀。</li>
+                  <li>依單人通勤、雙載、長途等不同情境調整避震設定。</li>
+                  <li>檢查避震漏油、卡滯與異音並判斷維修或更換時機。</li>
+                </ul>
+              </div>
+              <p class="topic-stronger">
+                <b>完成這門課，你會更擅長：</b>
+                聽得懂車主形容的騎乘感受，轉成具體的避震設定方向，
+                並在試車後用同一套語言回饋調整結果。
+              </p>
+              <a href="Damper-principle" class="topic-btn"> 查看避震課程 </a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <footer></footer>
+
+    <script>
+      (function () {
+        const carousel = document.getElementById("heroCarousel");
+        const slides = carousel.querySelectorAll(".hero-slide");
+        const dots = carousel.querySelectorAll(".hero-dot");
+
+        let current = 0;
+        let timer = null;
+        const interval = 3000; // 6 秒換一張
+
+        function showSlide(index) {
+          if (index < 0) index = slides.length - 1;
+          if (index >= slides.length) index = 0;
+
+          slides[current].classList.remove("active");
+          dots[current].classList.remove("active");
+
+          current = index;
+
+          slides[current].classList.add("active");
+          dots[current].classList.add("active");
+        }
+
+        function next() {
+          showSlide(current + 1);
+        }
+
+        function startAuto() {
+          stopAuto();
+          timer = setInterval(next, interval);
+        }
+
+        function stopAuto() {
+          if (timer) clearInterval(timer);
+        }
+
+        dots.forEach(function (dot) {
+          dot.addEventListener("click", function () {
+            const index = Number(dot.getAttribute("data-index"));
+            showSlide(index);
+            startAuto();
+          });
+        });
+
+        carousel.addEventListener("mouseenter", stopAuto);
+        carousel.addEventListener("mouseleave", startAuto);
+
+        startAuto();
+      })();
+    </script>
+  </body>
+</html>
